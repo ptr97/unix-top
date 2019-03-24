@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include "config.h"
 
 
-int main(int argc, char const * argv[])
+int main(int argc, const char * argv[])
 {
-    printf("My awesome top!\n");
+    struct Config conf = readConfig(argc, argv);
+
     return 0;
 }
