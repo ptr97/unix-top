@@ -24,5 +24,10 @@ mytop
 mytop --rsslim=10M --watch
 ```
 
+* help
+```bash
+mytop --help
+```
+
 ## Author
 Piotr Woś
