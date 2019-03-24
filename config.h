@@ -1,13 +1,13 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 
 struct Config
 {
-    bool help;
     bool justList;
     bool watch;
     unsigned int rsslim;
@@ -16,6 +16,11 @@ struct Config
 bool stringEqual(const char * str1, const char * str2)
 {
     return strcmp(str1, str2) == 0;
+}
+
+bool stringStartsWith(const char * str, const char * prefix)
+{
+    return strncmp(str, prefix, strlen(prefix)) == 0;
 }
 
 void printHelp()
@@ -31,12 +36,32 @@ void printHelp()
 
 struct Config readConfig(int args, const char * argv[])
 {
-    struct Config conf  = { .help = false, .justList = true, .watch = false, .rsslim = 0 };
+    struct Config conf  = { .justList = true, .watch = false, .rsslim = 0 };
     if(args > 1)
     {
         if(stringEqual(argv[1], "--help"))
         {
             printHelp();
+            exit(EXIT_SUCCESS);
+        }
+        
+        for(unsigned i = 1; i < args; ++i)
+        {
+            if(stringEqual(argv[i], "--watch"))
+            {
+                conf.justList = false;
+                conf.watch = true;
+            }
+            else if(stringStartsWith(argv[i], "--rsslim="))
+            {
+                int limit = atoi(argv[i] + strlen("--rsslim="));
+                conf.rsslim = limit;
+            }
+            else
+            {
+                printf("%s is not valid flag.\n", argv[i]);
+                exit(EXIT_FAILURE);
+            }                
         }
     }
     return conf;
