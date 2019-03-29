@@ -52,15 +52,11 @@ struct Config readConfig(int argc, const char * argv[])
     switch (c) 
     {
       case 0:
-        printf("option %s", long_options[option_index].name);
         if(optarg)
         {
-          printf(" with arg %s\n", optarg);
           int limit = atoi(optarg);
           conf.rsslim = limit;
-          printf("limit = %d\n", limit);
         }
-        printf("\n");
         break;
 
       case 'h':
@@ -70,7 +66,6 @@ struct Config readConfig(int argc, const char * argv[])
       case 'w':
         conf.justList = false;
         conf.watch = true;
-        printf("--watch mode\njustList = %d\tconf.watch = %d\n", conf.justList, conf.watch);
         break;
 
       case '?':
@@ -90,6 +85,12 @@ struct Config readConfig(int argc, const char * argv[])
   }
 
   return conf;
+}
+
+void printConfig(struct Config conf)
+{
+  printf("config:\n");
+  printf("just list = %d\twatch = %d\trsslim = %d\n", conf.justList, conf.watch, conf.rsslim);
 }
 
 
