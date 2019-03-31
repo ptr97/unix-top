@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include "config.h"
-#include "ProcessesReader.h"
+#include "top.h"
 
 
 int main(int argc, const char * argv[])
 {
   struct Config conf = readConfig(argc, argv);
-
-  // cglob - for scanning directory 
-  readProcesses();
+  printProgramHeader();
+  printProcessesInfoHeader();
+  
+  readAllProcesses();
 
   return 0;
 }
