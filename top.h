@@ -64,13 +64,14 @@ void printProcessesInfoHeader()
 	// printf("   PID  USER     PR  NI    VIRT     RES    SHR  S    %%CPU    %%MEM     TIME+    COMMAND   \n");
 }
 
-void printProcessInfo(ProcessStat stat)
+void printProcessInfo(ProcessStat stat, unsigned int rssLimit)
 {
-	printf("%6d  piotr   %3ld %3ld  %6ld  %6ld  %3c  %12s\n", stat.pid, stat.priority + 20, stat.priority, stat.vsize/1024, stat.rss, stat.state, stat.exName);
+	if(stat.rss > rssLimit)
+		printf("%6d  piotr   %3ld %3ld  %6ld  %6ld  %3c  %12s\n", stat.pid, stat.priority + 20, stat.priority, stat.vsize/1024, stat.rss, stat.state, stat.exName);
 }
 
 
-void readAllProcesses()
+void readAllProcesses(unsigned int rssLimit)
 {
 	FILE * fp = NULL;
 	char * s, * t;
@@ -94,8 +95,6 @@ void readAllProcesses()
 			fclose(fp);
 			continue;
 		}
-
-		
 
 		ProcessStat processStat;
 		memset(&processStat, 0, sizeof(processStat));
@@ -148,7 +147,7 @@ void readAllProcesses()
 			&(processStat.wchan)
 		);
 
-		printProcessInfo(processStat);
+		printProcessInfo(processStat, rssLimit);
 
 		fclose(fp);
 	}
