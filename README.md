@@ -24,6 +24,11 @@ mytop
 mytop --rsslim=10M --watch
 ```
 
+* with provided number of displayed rows in console
+```bash
+mytop --rows=42
+```
+
 * help
 ```bash
 mytop --help
