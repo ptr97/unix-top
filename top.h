@@ -8,7 +8,14 @@
 
 #define MAX_BUFF_SIZE 4096
 
-// uid() - for check if there is my own process
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RESET "\x1B[0m"
 
 
 typedef struct statstruct_proc {
@@ -52,22 +59,38 @@ typedef struct statstruct_proc {
 } ProcessStat;
 
 
+void clearScreen()
+{
+    printf("\e[1;1H\e[2J");
+}
 
 void printProgramHeader()
 {
-	printf("<-------------------- UNIX top by Piotr Wos -------------------->\n\n");
+	printf("%s", MAG);
+	printf("<------------------------------ UNIX top by Piotr Wos ------------------------------>\n\n");
+	printf("%s", RESET);
 }
 
 void printProcessesInfoHeader()
 {
-	printf("   PID  USER     PR  NI    VIRT     RES    S       COMMAND   \n");
-	// printf("   PID  USER     PR  NI    VIRT     RES    SHR  S    %%CPU    %%MEM     TIME+    COMMAND   \n");
+	printf("%s", CYN);
+	printf("%6s\t%6s\t%6s\t%12s\t%12s\t%3s\t%12s\n", "PID", "PR", "NI", "VIRT", "RES", "S", "COMMAND");
+	printf("%s", RESET);
+	// oryginal TOP header -> PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
 }
 
 void printProcessInfo(ProcessStat stat, unsigned int rssLimit)
 {
 	if(stat.rss > rssLimit)
-		printf("%6d  piotr   %3ld %3ld  %6ld  %6ld  %3c  %12s\n", stat.pid, stat.priority + 20, stat.priority, stat.vsize/1024, stat.rss, stat.state, stat.exName);
+		printf("%6d\t%6ld\t%6ld\t%12ld\t%12ld\t%3c\t%-12s\n", stat.pid, stat.priority + 20, stat.priority, stat.vsize/1024, stat.rss, stat.state, stat.exName);
+}
+
+int compare(const void * a, const void * b)
+{
+	ProcessStat * ptrA = (ProcessStat *) a;
+	ProcessStat * ptrB = (ProcessStat *) b;
+
+	return (ptrB->rss - ptrA->rss);
 }
 
 
@@ -79,6 +102,7 @@ void readAllProcesses(unsigned int rssLimit)
 	glob_t globbuf;
 
 	glob("/proc/[0-9]*/stat", 0, NULL, &globbuf);
+	ProcessStat * arrayOfProcesses = calloc(globbuf.gl_pathc, sizeof(ProcessStat));
 
 	for(size_t i = 0; i < globbuf.gl_pathc; ++i)
 	{
@@ -147,10 +171,21 @@ void readAllProcesses(unsigned int rssLimit)
 			&(processStat.wchan)
 		);
 
-		printProcessInfo(processStat, rssLimit);
+		arrayOfProcesses[i] = processStat;
 
 		fclose(fp);
 	}
+
+	
+
+	qsort(arrayOfProcesses, globbuf.gl_pathc, sizeof(ProcessStat), compare);
+
+	for(size_t j = 0; j < 40; ++j)
+	{
+		printProcessInfo(arrayOfProcesses[j], rssLimit);
+	}
+
+	free(arrayOfProcesses);
 
 	globfree(&globbuf);
 }

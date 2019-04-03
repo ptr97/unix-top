@@ -13,7 +13,7 @@ int main(int argc, const char * argv[])
 
   while(conf.watch) 
   {
-  	system("clear");
+    clearScreen();
   	printProcessesInfoHeader();
   	readAllProcesses(conf.rsslim);
   	sleep(2);
