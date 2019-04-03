@@ -2,21 +2,27 @@
 
 ## About
 
-top (table of processes) - is a task manager program found in many Unix-like operating systems that displays information about CPU and memory utilization.
+top (table of processes) - is a task manager program found in many Unix-like operating systems that displays information about CPU and memory usage.
 
 ## My top project
 
 First **programming in UNIX systems** course project  - process statistics sniffer.
 
- Uses linux procfs to produce an output similar to the top command. 
+ Uses linux *procfs* to produce an output similar to the top command. 
 
-In addition allows for setting limits that would signal processes exceeding them. 
+In addition it allows to display processes above provided rss limit. 
+
 
 ## Usage
 
 * just listing
 ```bash
 mytop
+```
+
+* help
+```bash
+mytop --help
 ```
 
 * keeps running and continuously checking if there are processes that exceed RSS limit of 10M. These processes are listed.
@@ -29,10 +35,6 @@ mytop --rsslim=10M --watch
 mytop --rows=42
 ```
 
-* help
-```bash
-mytop --help
-```
 
 ## Author
 Piotr Woś
