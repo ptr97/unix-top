@@ -3,7 +3,7 @@
 
 void clearScreen()
 {
-    printf("\e[1;1H\e[2J");
+  printf("\e[1;1H\e[2J");
 }
 
 void printProgramHeader()
@@ -117,8 +117,6 @@ void readAllProcesses(unsigned int rssLimit, unsigned int rows)
 
 		fclose(fp);
 	}
-
-	
 
 	qsort(arrayOfProcesses, globbuf.gl_pathc, sizeof(ProcessStat), compare);
 
