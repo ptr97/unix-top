@@ -7,7 +7,6 @@
 #include <glob.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <sys/procfs.h>
 
 #define MAX_BUFF_SIZE 4096
 
