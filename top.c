@@ -120,7 +120,7 @@ void readAllProcesses(unsigned int rssLimit, unsigned int rows)
 
 	qsort(arrayOfProcesses, globbuf.gl_pathc, sizeof(ProcessStat), compare);
 
-	for(size_t j = 0; j < rows; ++j)
+	for(size_t j = 0; j < rows && j < globbuf.gl_pathc; ++j)
 	{
 		printProcessInfo(arrayOfProcesses[j], rssLimit);
 	}
