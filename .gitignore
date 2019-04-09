@@ -1,6 +1,9 @@
 #system
 .DS_Store
 
+#IDE
+.vscode
+
 # Prerequisites
 *.d
 
